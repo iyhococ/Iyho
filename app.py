@@ -2,7 +2,7 @@ import streamlit as st
 from google import genai
 from google.genai import types
 
-st.set_page_config(page_title="Quant Sports Analyzer", page_icon="🏆", layout="wide")
+st.set_page_config(page_title="Quant Sports Analyzer", page_icon="🏆", layout="centered")
 
 MASTER_PROMPT = r"""
 You are a Quantitative Sports Data Analyst & Multi-Market Prediction Engine.
@@ -74,7 +74,12 @@ st.caption("Blind analysis • Multi-market • Fatigue • Trap & Integrity che
 
 with st.sidebar:
     st.header("⚙️ Settings")
-    model = st.text_input("Gemini model", "gemini-3.6-flash")
+    model = st.selectbox(
+        "Gemini model",
+        ["gemini-3.6-flash", "gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.5-flash"],
+        index=0,
+        help="Model Gemini 3.x yang tersedia. Default: Gemini 3.6 Flash."
+    )
     st.info("API key: GEMINI_API_KEY in Streamlit Secrets")
 
 api_key = st.secrets.get("GEMINI_API_KEY", "")
@@ -102,6 +107,17 @@ if st.button("🚀 ANALYZE MATCH", type="primary", use_container_width=True):
             result = client.models.generate_content(model=model, contents=contents)
         st.subheader("📊 HASIL ANALISIS")
         st.markdown(result.text)
+
+        st.divider()
+        st.subheader("📋 Salin / Simpan Hasil")
+        st.code(result.text, language=None)
+        st.download_button(
+            "⬇️ Download hasil (.txt)",
+            data=result.text,
+            file_name="quant_sports_analysis.txt",
+            mime="text/plain",
+            use_container_width=True,
+        )
     except Exception as e:
         st.error(f"Error: {e}")
-        st.caption("Jika model tidak tersedia, coba model Gemini lain di sidebar.")
+        st.caption("Default sudah diubah ke Gemini 3.6 Flash. Jika perlu, pilih model Gemini 3.x lain di sidebar.")
