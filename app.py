@@ -74,7 +74,7 @@ st.caption("Blind analysis • Multi-market • Fatigue • Trap & Integrity che
 
 with st.sidebar:
     st.header("⚙️ Settings")
-    model = st.text_input("Gemini model", "gemini-2.5-flash")
+    model = st.text_input("Gemini model", "gemini-3.6-flash")
     st.info("API key: GEMINI_API_KEY in Streamlit Secrets")
 
 api_key = st.secrets.get("GEMINI_API_KEY", "")
